@@ -1,5 +1,9 @@
 ---
 - hosts: 192.168.1.131
+  become: yes
+  become_user: root
+  vars:
+    message: hello world
   tasks:
     - name: Install nginx package
       apt: name=nginx state=present
@@ -8,6 +12,7 @@
       template: src=./nginx.conf.j2 dest=/etc/nginx/nginx.conf owner=root group=root mode=0644 validate='nginx -t -c %s'
       notify:
         - Restart Nginx Service
+        
   handlers:
     - name: Restart Nginx Service
       service: name=nginx state=restarted
